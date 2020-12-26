@@ -15,7 +15,7 @@ public class PerspectiveShift : MonoBehaviour
     private Vector2 positionShift = Vector2.zero;
 
 
-    private Camera camera;
+    private new Camera camera;
     private Matrix4x4 targetMatrix;
     private Vector2 baseAspectScale;
 
