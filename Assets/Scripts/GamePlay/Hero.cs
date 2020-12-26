@@ -8,8 +8,9 @@ public class Hero : Creature
     private Joystick joystick;
 
     private new Rigidbody rigidbody;
-
     private float direction;
+    private float lastShootTime;
+
 
     protected override void Awake()
     {
@@ -19,10 +20,38 @@ public class Hero : Creature
         rigidbody.isKinematic = false;
     }
 
+
+    private void Update()
+    {
+        CheckState();
+        if (currentState == CreatureState.Idle)
+        {
+            aimController.HandleTarget();
+        }
+    }
+
     private void FixedUpdate()
     {
         Move();
     }
+
+    private void CheckState()
+    {
+        switch (currentState)
+        {
+            case CreatureState.Idle when joystick.Direction != Vector2.zero:
+                currentState = CreatureState.Moving;
+                break;
+            case CreatureState.Moving when joystick.Direction == Vector2.zero:
+                currentState = CreatureState.Idle;
+                break;
+            case CreatureState.Dead:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
 
     protected override void Move()
     {

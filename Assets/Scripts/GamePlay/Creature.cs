@@ -4,6 +4,13 @@ using UnityEngine;
 
 public abstract class Creature : MonoBehaviour
 {
+    protected enum CreatureState
+    {
+        Moving,
+        Idle,
+        Dead
+    }
+
     public delegate void CreatureEvent();
 
     public event CreatureEvent CreatureDied;
@@ -32,10 +39,15 @@ public abstract class Creature : MonoBehaviour
 
     public float Damage => damage;
 
+    
+    protected CreatureState currentState = CreatureState.Idle;
+
+    protected AimController aimController;
 
     protected virtual void Awake()
     {
         currentHp = maxHp;
+        aimController = GetComponent<AimController>();
     }
 
     protected virtual void Death(Creature killer)
