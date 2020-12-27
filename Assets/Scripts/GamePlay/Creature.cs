@@ -39,10 +39,11 @@ public abstract class Creature : MonoBehaviour
 
     public float Damage => damage;
 
-    
+
     protected CreatureState currentState = CreatureState.Idle;
 
     protected AimController aimController;
+
 
     protected virtual void Awake()
     {

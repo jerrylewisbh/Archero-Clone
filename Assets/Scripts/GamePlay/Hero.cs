@@ -12,10 +12,13 @@ public class Hero : Creature
     private float lastShootTime;
 
 
+    private ShooterController shooterController;
+    
     protected override void Awake()
     {
         base.Awake();
         rigidbody = GetComponent<Rigidbody>();
+        shooterController = GetComponent<ShooterController>();
         rigidbody.useGravity = false;
         rigidbody.isKinematic = false;
     }
@@ -24,10 +27,20 @@ public class Hero : Creature
     private void Update()
     {
         CheckState();
-        if (currentState == CreatureState.Idle)
+        if (currentState != CreatureState.Idle)
         {
-            aimController.HandleTarget();
+            return;
         }
+
+        aimController.HandleTarget();
+            
+        if (!(Time.time - lastShootTime >= (1 / attackSpeed)))
+        {
+            return;
+        }
+
+        lastShootTime = Time.time;
+        shooterController.Shoot();
     }
 
     private void FixedUpdate()
@@ -47,8 +60,6 @@ public class Hero : Creature
                 break;
             case CreatureState.Dead:
                 break;
-            default:
-                throw new ArgumentOutOfRangeException();
         }
     }
 
